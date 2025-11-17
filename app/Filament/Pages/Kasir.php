@@ -15,4 +15,5 @@ class Kasir extends Page
 
     // ❗ INGAT: TIDAK STATIC!
     protected string $view = 'filament.pages.kasir';
+
 }

@@ -41,6 +41,7 @@ class IngredientResource extends Resource
         return [];
     }
 
+
     public static function getPages(): array
     {
         return [

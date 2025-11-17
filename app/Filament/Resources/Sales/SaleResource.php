@@ -9,6 +9,13 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
 use BackedEnum;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables;
+use Illuminate\Database\Eloquent\Builder;
+
+
+
 
 class SaleResource extends Resource
 {
@@ -18,12 +25,70 @@ class SaleResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return SalesTable::configure($table);
+        return $table
+            ->columns([
+                TextColumn::make('invoice_number')
+                    ->label('Invoice')
+                    ->searchable(),
+
+                TextColumn::make('user.name')
+                    ->label('Kasir')
+                    ->sortable(),
+
+                // TextColumn::make('items_count')
+                //     ->label('Item'),
+
+                TextColumn::make('total')
+                    ->label('Total')
+                    ->money('IDR')
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Tanggal')
+                    ->dateTime('Y-m-d H:i:s')
+                    ->sortable(),
+
+                // MENU COLUMN YANG BENAR
+                TextColumn::make('menu')
+                    ->label('Menu')
+                    ->state(function ($record) {
+                        return $record->items
+                            ->map(fn($i) => "{$i->name} ({$i->quantity})")
+                            ->implode(', ');
+                    })
+                    ->wrap(),
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                // Jika Anda ingin menambah detail action nanti, letakkan di sini
+            ])
+            ->bulkActions([
+                // Jika ingin bulk delete di masa depan
+            ]);
     }
 
-    public static function canCreate(): bool { return false; }
-    public static function canEdit($record): bool { return false; }
-    public static function canDelete($record): bool { return false; }
+
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->with(['items', 'items.product', 'user']);
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+    public static function canEdit($record): bool
+    {
+        return false;
+    }
+    public static function canDelete($record): bool
+    {
+        return false;
+    }
 
     public static function getPages(): array
     {

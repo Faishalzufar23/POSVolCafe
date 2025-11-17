@@ -8,28 +8,35 @@ class Product extends Model
 {
     protected $fillable = [
         'name',
+        'price',
         'sku',
         'description',
-        'price',
-        'stock',
-        'image',
+        'photo',
     ];
-
-    public function saleItems()
-    {
-        return $this->hasMany(SaleItem::class);
-    }
 
     public function productIngredients()
     {
         return $this->hasMany(ProductIngredient::class);
-        return $this->hasMany(\App\Models\ProductIngredient::class);
     }
 
-
-    public function ingredients()
+    public function getStockAttribute()
     {
-        return $this->belongsToMany(Ingredient::class, 'product_ingredients')
-            ->withPivot('quantity', 'unit');
+        $recipes = $this->productIngredients()->with('ingredient')->get();
+
+        if ($recipes->isEmpty()) return 0;
+
+        $min = null;
+
+        foreach ($recipes as $r) {
+            if (!$r->ingredient || $r->quantity <= 0) continue;
+
+            $available = floor($r->ingredient->stock / $r->quantity);
+
+            if ($min === null || $available < $min) {
+                $min = $available;
+            }
+        }
+
+        return $min ?? 0;
     }
 }

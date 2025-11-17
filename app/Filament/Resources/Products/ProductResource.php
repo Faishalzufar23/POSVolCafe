@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class ProductResource extends Resource
 {
@@ -39,6 +40,25 @@ class ProductResource extends Resource
             ProductIngredientsRelationManager::class,
         ];
     }
+    // public static function canViewAny(): bool
+    // {
+    //     return (Auth::user()?->role ?? '') === 'admin';
+    // }
+
+    // public static function canEdit($record): bool
+    // {
+    //     return (Auth::user()?->role ?? '') === 'admin';
+    // }
+
+    // public static function canDelete($record): bool
+    // {
+    //     return (Auth::user()?->role ?? '') === 'admin';
+    // }
+
+    // public static function canCreate(): bool
+    // {
+    //     return (Auth::user()?->role ?? '') === 'admin';
+    // }
 
     public static function getPages(): array
     {

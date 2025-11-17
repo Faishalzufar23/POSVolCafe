@@ -1,26 +1,24 @@
 <x-filament-panels::page class="!p-0 !m-0">
 
     <style>
-        /* Override Flux Layout (ini yang bikin halaman mengecil) */
         .fi-main,
         .fi-body,
         .fi-page,
         .fi-page-content {
-            max-width: 100% !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
+            max-width: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         .fi-page-content > div {
-            width: 100% !important;
-            max-width: 100% !important;
-            padding: 0 !important;
+            width: 100% ;
+            max-width: 100% ;
+            padding: 0 ;
         }
 
-        /* Menghilangkan container dan gap bawaan Flux */
         .fi-page {
-            display: block !important;
+            display: block ;
         }
     </style>
 
