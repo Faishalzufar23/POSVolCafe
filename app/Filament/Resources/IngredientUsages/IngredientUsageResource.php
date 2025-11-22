@@ -55,7 +55,8 @@ class IngredientUsageResource extends Resource
                     ->label('Bahan Baku'),
 
                 TextColumn::make('quantity_used')
-                    ->label('Jumlah Digunakan'),
+                    ->label('Jumlah Digunakan')
+                    ->formatStateUsing(fn ($state) => rtrim(rtrim($state, '0'), '.')),
 
                 TextColumn::make('unit')
                     ->label('Satuan'),
