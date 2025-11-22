@@ -33,6 +33,7 @@ class ProductIngredientsRelationManager extends RelationManager
             Forms\Components\TextInput::make('quantity')
                 ->label('Jumlah / Produk')
                 ->numeric()
+                ->inputMode('decimal')
                 ->required(),
 
             Forms\Components\TextInput::make('unit')
@@ -44,9 +45,15 @@ class ProductIngredientsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('ingredient.name')->label('Bahan'),
-                Tables\Columns\TextColumn::make('quantity')->label('Jumlah'),
-                Tables\Columns\TextColumn::make('unit')->label('Satuan'),
+                Tables\Columns\TextColumn::make('ingredient.name')
+                ->label('Bahan'),
+
+                Tables\Columns\TextColumn::make('quantity')
+                ->label('Jumlah')
+                ->formatStateUsing(fn ($state) => rtrim(rtrim($state, '0'), '.')),
+
+                Tables\Columns\TextColumn::make('unit')
+                ->label('Satuan'),
             ])
 
             // ⚡ HEADER ACTION YANG BENAR
@@ -64,6 +71,7 @@ class ProductIngredientsRelationManager extends RelationManager
 
                         Forms\Components\TextInput::make('quantity')
                             ->label('Jumlah / Produk')
+                            ->inputMode('decimal')
                             ->numeric()
                             ->required(),
 

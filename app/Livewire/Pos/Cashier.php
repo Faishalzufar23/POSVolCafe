@@ -30,17 +30,20 @@ class Cashier extends Component
     {
         $query = Product::with('productIngredients.ingredient');
 
-        if ($this->search) {
-            $query->where('name', 'like', "%{$this->search}%");
+        if (!empty($this->search)) {
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($this->search) . '%']);
         }
 
         $this->products = $query->get()->toArray();
     }
 
+
+
     public function updatedSearch()
     {
         $this->loadProducts();
     }
+
 
     public function addToCart($id)
     {

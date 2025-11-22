@@ -8,11 +8,17 @@ class Product extends Model
 {
     protected $fillable = [
         'name',
-        'price',
         'sku',
         'description',
-        'photo',
+        'price',
+
     ];
+
+    protected $casts = [
+    'photo' => 'string',
+];
+
+
 
     public function productIngredients()
     {

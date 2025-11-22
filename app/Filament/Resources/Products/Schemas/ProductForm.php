@@ -30,10 +30,17 @@ class ProductForm
                 ->numeric()
                 ->required(),
 
-            FileUpload::make('image')
+            FileUpload::make('photo')
                 ->label('Foto Produk')
                 ->image()
-                ->directory('products'),
+                ->directory('products')
+                ->preserveFilenames()
+                ->visibility('public')
+
+
+
+
+
         ]);
     }
 }

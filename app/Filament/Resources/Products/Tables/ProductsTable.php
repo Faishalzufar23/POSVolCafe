@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Products\Tables;
 
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 
 class ProductsTable
 {
@@ -11,11 +13,37 @@ class ProductsTable
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label('Nama'),
-                Tables\Columns\TextColumn::make('price')->label('Harga'),
-                Tables\Columns\TextColumn::make('stock')->label('Stok'),
-                Tables\Columns\ImageColumn::make('image')->label('Foto')->rounded(),
+                TextColumn::make('name')
+                    ->label('Nama Produk')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('sku')
+                    ->label('SKU')
+                    ->searchable(),
+
+                TextColumn::make('price')
+                    ->label('Harga')
+                    ->money('IDR')
+                    ->sortable()
+                    ->searchable(),
+
+                ImageColumn::make('photo')
+                    ->label('Foto')
+                    ->getStateUsing(
+                        fn($record) =>
+                        $record->photo ? asset('storage/' . $record->photo) : null
+                    )
+                    ->defaultImageUrl(asset('no-image.png'))
+                    ->square()
+
+
+
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('name', 'asc')
+            ->searchable()
+            ->filters([
+                //
+            ]);
     }
 }
