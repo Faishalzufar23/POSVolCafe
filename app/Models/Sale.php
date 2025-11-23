@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Sale extends Model
 {
     protected $fillable = [
-    'invoice_number',
-    'user_id',
-    'items_count',
-    'sub_total',
-    'tax',
-    'discount',
-    'total',
-    'payment_status',
-    'payment_method',
-    'paid_amount',
-    'change_amount'
-];
+        'invoice_number',
+        'user_id',
+        'items_count',
+        'sub_total',
+        'tax',
+        'discount',
+        'total',
+        'payment_status',
+        'payment_method',
+        'paid_amount',
+        'change_amount'
+    ];
 
     public function user()
     {
@@ -33,5 +33,10 @@ class Sale extends Model
     public function ingredientUsages()
     {
         return $this->hasMany(IngredientUsage::class);
+    }
+
+    public function saleItems()
+    {
+        return $this->hasMany(SaleItem::class);
     }
 }

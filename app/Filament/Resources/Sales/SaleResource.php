@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources\Sales;
 
-use App\Filament\Resources\Sales\Tables\SalesTable;
-use App\Filament\Resources\Sales\Pages\ListSales;
-use App\Models\Sale;
-use Filament\Resources\Resource;
-use Filament\Tables\Table;
-use Filament\Support\Icons\Heroicon;
 use BackedEnum;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\ViewAction;
+use App\Models\Sale;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Table;
+use Filament\Actions\Action;
+use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\Sales\Pages\ListSales;
+use App\Filament\Resources\Sales\Tables\SalesTable;
+use Illuminate\Database\Eloquent\Model;
 
 
 
@@ -36,23 +38,20 @@ class SaleResource extends Resource
                     ->label('Kasir')
                     ->sortable(),
 
-                // TextColumn::make('items_count')
-                //     ->label('Item'),
-
                 TextColumn::make('total')
                     ->label('Total')
                     ->money('IDR')
                     ->sortable(),
 
-                TextColumn::make('paid_amount')
-                    ->label('Dibayar')
-                    ->money('IDR')
-                    ->sortable(),
+                // TextColumn::make('paid_amount')
+                //     ->label('Dibayar')
+                //     ->money('IDR')
+                //     ->sortable(),
 
-                TextColumn::make('change_amount')
-                    ->label('Kembalian')
-                    ->money('IDR')
-                    ->sortable(),
+                // TextColumn::make('change_amount')
+                //     ->label('Kembalian')
+                //     ->money('IDR')
+                //     ->sortable(),
 
                 TextColumn::make('payment_method')
                     ->label('Metode')
@@ -61,10 +60,7 @@ class SaleResource extends Resource
                         'success' => 'cash',
                         'info' => 'qris',
                     ])
-                    ->formatStateUsing(
-                        fn($state) =>
-                        strtoupper($state)
-                    )
+                    ->formatStateUsing(fn($state) => strtoupper($state))
                     ->sortable(),
 
                 TextColumn::make('created_at')
@@ -72,16 +68,27 @@ class SaleResource extends Resource
                     ->dateTime('Y-m-d H:i:s')
                     ->sortable(),
 
-                // MENU COLUMN YANG BENAR
-                TextColumn::make('menu')
+                // 🔥 Kolom Menu → menampilkan jumlah item + klik untuk detail
+                TextColumn::make('items_count')
                     ->label('Menu')
-                    ->state(
-                        fn($record) =>
-                        $record->items
-                            ->map(fn($i) => "{$i->name} ({$i->quantity})")
-                            ->toArray()
+                    ->state(fn($record) => 'Detail Pesanan')
+                    ->url(fn($record) => null) // cegah default link
+                    ->action(
+                        Action::make('detail')
+                            ->label('Detail Pesanan')
+                            ->icon('heroicon-o-eye')
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(false)
+                            ->modalWidth('lg')
+                            ->modalContent(fn($record) => view('modals.sale-detail-modal', [
+                                'order' => $record->load('items.product'),
+                            ]))
                     )
-                    ->wrap(),
+                    ->extraAttributes([
+                        'class' => 'text-primary font-medium cursor-pointer hover:underline'
+                    ])
+
+
             ])
 
 
@@ -102,7 +109,7 @@ class SaleResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['items', 'items.product', 'user']);
+            ->with(['items.product', 'user']);
     }
 
     public static function canCreate(): bool

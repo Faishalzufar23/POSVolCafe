@@ -26,31 +26,12 @@ class IngredientForm
                 ])
                 ->required(),
 
-            TextInput::make('stock')
-                ->label('Stok Sekarang')
-                ->numeric()
-                ->disabled()
-                ->default(fn($record) => $record?->stock ?? 0),
+            // TextInput::make('stock')
+            //     ->label('Stok Sekarang')
+            //     ->numeric()
+            //     ->disabled()
+            //     ->default(fn($record) => $record?->stock ?? 0),
 
-            TextInput::make('add_stock')
-                ->label('Tambah Stok')
-                ->numeric()
-                ->default(0)
-                ->reactive()
-                ->afterStateUpdated(function ($state, $record) {
-                    if (!$record || $state <= 0) return;
-
-                    // update stok langsung
-                    $record->increment('stock', $state);
-
-                    // catat riwayat masuk stok
-                    IngredientPurchase::create([
-                        'ingredient_id' => $record->id,
-                        'quantity' => $state,
-                        'unit' => $record->unit,
-                        'purchase_date' => now(),
-                    ]);
-                }),
 
         ]);
     }
