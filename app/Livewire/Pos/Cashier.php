@@ -13,6 +13,9 @@ use App\Models\IngredientUsage;
 use App\Models\ProductIngredient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+
 
 class Cashier extends Component
 {
@@ -280,7 +283,7 @@ class Cashier extends Component
         $this->stepPayment = 1;
     }
 
-
+    public $receiptPdfUrl = null;
     public function printReceipt($saleId = null)
     {
         $sale = Sale::with(['items.product', 'user', 'customer'])
@@ -303,10 +306,16 @@ class Cashier extends Component
         $this->showReceipt = true;
     }
 
+    public function generatePdf(Sale $sale)
+    {
+        $pdf = Pdf::loadView('receipts.pdf', ['sale' => $sale])
+            ->setPaper('a6', 'portrait'); // ukuran kecil format struk
 
+        $fileName = "receipts/{$sale->invoice_number}.pdf";
+        Storage::put("public/{$fileName}", $pdf->output());
 
-
-
+        return Storage::url($fileName);
+    }
 
 
     public function render()
