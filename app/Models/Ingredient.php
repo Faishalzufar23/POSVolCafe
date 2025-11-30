@@ -10,12 +10,13 @@ class Ingredient extends Model
         'name',
         'unit',
         'stock',
+        'price',        // ← WAJIB !!! supaya harga tersimpan
     ];
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)
-            ->withPivot('quantity')
+        return $this->belongsToMany(Product::class, 'product_ingredients')
+            ->withPivot('quantity', 'unit')
             ->withTimestamps();
     }
 

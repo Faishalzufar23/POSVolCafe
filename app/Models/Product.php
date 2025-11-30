@@ -11,30 +11,28 @@ class Product extends Model
         'sku',
         'description',
         'price',
-
     ];
 
-    protected $casts = [
-        'photo' => 'string',
-    ];
-
-    public function cost()
+    public function saleItems()
     {
-        if (!$this->ingredients || $this->ingredients->isEmpty()) {
-            return 0;
-        }
-
-        return $this->ingredients->sum(function ($ingredient) {
-            return ($ingredient->pivot->quantity ?? 0) * ($ingredient->price ?? 0);
-        });
+        return $this->hasMany(SaleItem::class, 'product_id');
     }
 
-    // Hitung jumlah terjual hari ini
-    public function soldToday()
+    public function productIngredients()
     {
-        return $this->saleItems()
-            ->whereDate('created_at', today())
-            ->sum('quantity');
+        return $this->hasMany(ProductIngredient::class);
+    }
+
+    // Relasi pivot ke tabel product_ingredients
+    public function ingredients()
+    {
+        return $this->belongsToMany(
+            Ingredient::class,
+            'product_ingredients',
+            'product_id',
+            'ingredient_id'
+        )->withPivot(['quantity', 'unit'])
+         ->withTimestamps();
     }
 
     // HPP per porsi
@@ -45,55 +43,21 @@ class Product extends Model
         });
     }
 
-    // HPP total hari ini
-    public function hppTotalToday()
+    // Total HPP
+    public function hppTotal()
     {
-        return $this->hppPerPorsi() * $this->soldToday();
+        return $this->hppPerPorsi() * $this->saleItems()->sum('quantity');
     }
 
-    // Laba kotor produk hari ini
-    public function profitToday()
+    // Total Penjualan
+    public function totalSales()
     {
-        return ($this->price - $this->hppPerPorsi()) * $this->soldToday();
+        return $this->saleItems()->sum('line_total');
     }
 
-    public function saleItems()
+    // Laba Kotor
+    public function profit()
     {
-        return $this->hasMany(SaleItem::class, 'product_id');
-    }
-
-
-    public function productIngredients()
-    {
-        return $this->hasMany(ProductIngredient::class);
-    }
-
-    public function ingredients()
-    {
-        return $this->belongsToMany(Ingredient::class)
-            ->withPivot('quantity')
-            ->withTimestamps();
-    }
-
-
-    public function getStockAttribute()
-    {
-        $recipes = $this->productIngredients()->with('ingredient')->get();
-
-        if ($recipes->isEmpty()) return 0;
-
-        $min = null;
-
-        foreach ($recipes as $r) {
-            if (!$r->ingredient || $r->quantity <= 0) continue;
-
-            $available = floor($r->ingredient->stock / $r->quantity);
-
-            if ($min === null || $available < $min) {
-                $min = $available;
-            }
-        }
-
-        return $min ?? 0;
+        return $this->totalSales() - $this->hppTotal();
     }
 }

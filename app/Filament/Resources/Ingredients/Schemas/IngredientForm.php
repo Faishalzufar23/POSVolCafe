@@ -16,7 +16,7 @@ class IngredientForm
             TextInput::make('name')
                 ->label('Nama Bahan')
                 ->required()
-                ->unique(ignorable: fn ($record) => $record),
+                ->unique(ignorable: fn($record) => $record),
 
             Select::make('unit')
                 ->label('Satuan')
@@ -27,14 +27,13 @@ class IngredientForm
                 ])
                 ->required(),
 
-            // TextInput::make('stock')
-            //     ->label('Stok Sekarang')
-            //     ->numeric()
-            //     ->disabled()
-            //     ->default(fn($record) => $record?->stock ?? 0),
+            TextInput::make('price_per_unit')
+                ->label('Harga per Unit (per gram / ml / pcs)')
+                ->numeric()
+                ->required()
+                ->prefix('Rp'),
 
 
         ]);
     }
 }
-
