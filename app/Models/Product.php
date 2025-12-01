@@ -32,7 +32,7 @@ class Product extends Model
             'product_id',
             'ingredient_id'
         )->withPivot(['quantity', 'unit'])
-         ->withTimestamps();
+            ->withTimestamps();
     }
 
     // HPP per porsi
@@ -59,5 +59,26 @@ class Product extends Model
     public function profit()
     {
         return $this->totalSales() - $this->hppTotal();
+    }
+
+    public function getStockAttribute()
+    {
+        $recipes = $this->productIngredients()->with('ingredient')->get();
+
+        if ($recipes->isEmpty()) return 0;
+
+        $min = null;
+
+        foreach ($recipes as $r) {
+            if (!$r->ingredient || $r->quantity <= 0) continue;
+
+            $available = floor($r->ingredient->stock / $r->quantity);
+
+            if ($min === null || $available < $min) {
+                $min = $available;
+            }
+        }
+
+        return $min ?? 0;
     }
 }

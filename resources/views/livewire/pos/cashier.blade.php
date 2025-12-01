@@ -16,10 +16,17 @@
                     <h3 class="font-semibold">{{ $p['name'] }}</h3>
                     <p>Rp {{ number_format($p['price']) }}</p>
 
+                    @php
+                        $disabled = ($p['stock'] ?? 0) <= 0;
+                    @endphp
+
                     <button wire:click="addToCart({{ $p['id'] }})"
-                        class="mt-3 bg-blue-600 text-white px-3 py-1 rounded">
-                        Tambah
+                        class="mt-3 px-3 py-1 rounded text-white
+        {{ $disabled ? 'bg-red-500 opacity-60 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700' }}"
+                        {{ $disabled ? 'disabled' : '' }}>
+                        {{ $disabled ? 'Stok Habis' : 'Tambah' }}
                     </button>
+
                 </div>
 
             @empty
@@ -257,9 +264,14 @@
         </div>
     @endif
 
-@include('livewire.pos.receipt-modal')
+    @include('livewire.pos.receipt-modal')
 
 
 
+    <script>
+        window.addEventListener('stok-habis', event => {
+            alert(event.detail.message);
+        });
+    </script>
 
 </div>

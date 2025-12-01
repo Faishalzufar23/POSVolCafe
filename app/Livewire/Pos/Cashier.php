@@ -42,6 +42,8 @@ class Cashier extends Component
         $this->loadProducts();
     }
 
+
+
     public function loadProducts()
     {
         $query = Product::with('productIngredients.ingredient');
@@ -61,21 +63,34 @@ class Cashier extends Component
     }
 
 
-    public function addToCart($id)
+    public function addToCart($productId)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('productIngredients.ingredient')->find($productId);
 
-        if (!isset($this->cart[$id])) {
-            $this->cart[$id] = [
-                'id'       => $product->id,
-                'name'     => $product->name,
-                'price'    => $product->price,
+        if (!$product) return;
+
+        // kalau stok habis
+        if ($product->stock <= 0) {
+            $this->dispatchBrowserEvent('stok-habis', [
+                'message' => "Stok {$product->name} habis!"
+            ]);
+            return;
+        }
+
+        // lanjutkan tambahkan ke cart
+        if (isset($this->cart[$productId])) {
+            $this->cart[$productId]['quantity']++;
+        } else {
+            $this->cart[$productId] = [
+                'name' => $product->name,
+                'price' => $product->price,
                 'quantity' => 1,
             ];
-        } else {
-            $this->cart[$id]['quantity']++;
         }
+
+        $this->calculateTotals();
     }
+
 
 
 
