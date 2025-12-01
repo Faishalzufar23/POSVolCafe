@@ -28,14 +28,14 @@ class ProductsTable
                     ->sortable()
                     ->searchable(),
 
-                ImageColumn::make('photo')
-                    ->label('Foto')
-                    ->getStateUsing(
-                        fn($record) =>
-                        $record->photo ? asset('storage/' . $record->photo) : null
-                    )
-                    ->defaultImageUrl(asset('no-image.png'))
-                    ->square()
+                // ImageColumn::make('photo')
+                //     ->label('Foto')
+                //     ->getStateUsing(
+                //         fn($record) =>
+                //         $record->photo ? asset('storage/' . $record->photo) : null
+                //     )
+                //     ->defaultImageUrl(asset('no-image.png'))
+                //     ->square()
 
 
 

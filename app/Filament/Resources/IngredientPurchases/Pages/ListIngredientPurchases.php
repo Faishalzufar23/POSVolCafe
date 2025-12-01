@@ -17,11 +17,8 @@ class ListIngredientPurchases extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            // Tombol default CREATE (tambah laporan)
+        $actions = [
             \Filament\Actions\CreateAction::make(),
-
-            // Tombol DOWNLOAD PDF
             \Filament\Actions\Action::make('downloadPdf')
                 ->label('Download PDF')
                 ->color('success')
@@ -37,7 +34,7 @@ class ListIngredientPurchases extends ListRecords
 
                     $records = $query->get();
 
-                    $pdf = Pdf::loadView('pdf.ingredient_purchases', [
+                    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.ingredient_purchases', [
                         'records' => $records,
                         'from' => $data['from'],
                         'until' => $data['until'],
@@ -49,5 +46,15 @@ class ListIngredientPurchases extends ListRecords
                     );
                 }),
         ];
+
+        // 🔥 Kasir → Hilangkan hanya tombol PDF
+        if (auth()->user()->isKasir()) {
+            return [
+                \Filament\Actions\CreateAction::make(),
+            ];
+        }
+
+        // 🔥 Admin → semua tombol tampil
+        return $actions;
     }
 }

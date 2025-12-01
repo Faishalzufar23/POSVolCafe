@@ -12,6 +12,9 @@ class ListProducts extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        if (auth()->user()->role !== 'admin') {
+            return []; // kasir tidak melihat tombol create
+        }
         return [
             CreateAction::make(),
         ];

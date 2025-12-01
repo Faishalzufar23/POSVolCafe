@@ -82,13 +82,14 @@ class Cashier extends Component
             $this->cart[$productId]['quantity']++;
         } else {
             $this->cart[$productId] = [
+                'id'       => $product->id,
                 'name' => $product->name,
                 'price' => $product->price,
                 'quantity' => 1,
             ];
         }
 
-        $this->calculateTotals();
+        // $this->calculateTotals();
     }
 
 

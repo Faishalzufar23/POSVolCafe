@@ -16,11 +16,10 @@ class ListIngredientUsages extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            // Tombol create bawaan
+        // 🔥 Semua tombol untuk admin
+        $actions = [
             CreateAction::make(),
 
-            // Tombol download PDF
             Action::make('downloadPdf')
                 ->label('Download PDF')
                 ->color('success')
@@ -48,5 +47,15 @@ class ListIngredientUsages extends ListRecords
                     );
                 }),
         ];
+
+        // 🔥 Kasir → hilangkan tombol PDF saja
+        if (auth()->user()->isKasir()) {
+            return [
+                CreateAction::make(),
+            ];
+        }
+
+        // 🔥 Admin → semua tombol tampil
+        return $actions;
     }
 }

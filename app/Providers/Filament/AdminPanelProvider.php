@@ -8,6 +8,8 @@ use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationItem;
 
 // Middleware
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -36,12 +38,15 @@ class AdminPanelProvider extends PanelProvider
 
             // Tambahkan supaya menu Dashboard muncul
             ->pages([
-                Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
+
+
 
             // AUTO DISCOVER resources & pages
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+
 
             // AUTO DISCOVER WIDGETS
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
@@ -67,4 +72,6 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ]);
     }
+
+
 }

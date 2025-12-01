@@ -34,33 +34,41 @@ class ProductResource extends Resource
         return ProductsTable::configure($table);
     }
 
-
-
-    // public static function canViewAny(): bool
-    // {
-    //     return (Auth::user()?->role ?? '') === 'admin';
-    // }
-
-    // public static function canEdit($record): bool
-    // {
-    //     return (Auth::user()?->role ?? '') === 'admin';
-    // }
-
-    // public static function canDelete($record): bool
-    // {
-    //     return (Auth::user()?->role ?? '') === 'admin';
-    // }
-
-    // public static function canCreate(): bool
-    // {
-    //     return (Auth::user()?->role ?? '') === 'admin';
-    // }
-
     public static function getRelations(): array
     {
         return [
             ProductIngredientsRelationManager::class,
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true; // tampil untuk semua role
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->role === 'admin';
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()->role === 'admin';
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()->role === 'admin';
     }
 
     public static function getPages(): array

@@ -15,7 +15,6 @@ use Filament\Tables\Table;
 
 class FinanceReportResource extends Resource
 {
-    // ⬇⬇⬇ FIX PALING PENTING
     protected static ?string $model = Product::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Laporan';
@@ -44,6 +43,22 @@ class FinanceReportResource extends Resource
     public static function getRelations(): array
     {
         return [];
+    }
+
+    /**
+     * ❗ HANYA ADMIN YANG BOLEH AKSES HALAMAN LAPORAN KEUANGAN
+     */
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isAdmin();
+    }
+
+    /**
+     * ❗ HANYA ADMIN YANG BOLEH MELIHAT MENU DI SIDEBAR
+     */
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->isAdmin();
     }
 
     public static function getPages(): array
