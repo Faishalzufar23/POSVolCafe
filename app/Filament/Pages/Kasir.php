@@ -15,5 +15,6 @@ class Kasir extends Page
 
     // ❗ INGAT: TIDAK STATIC!
     protected string $view = 'filament.pages.kasir';
+    protected static bool $shouldRegisterNavigation = true;
 
 }

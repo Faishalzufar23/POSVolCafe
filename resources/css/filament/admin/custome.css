@@ -1,0 +1,11 @@
+/* Resmi override tombol Filament */
+.filament-button.filament-button-primary {
+    background-color: #16a34a !important;  /* green */
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+.filament-button.filament-button-primary:hover {
+    background-color: #15803d !important;  /* darker green */
+    border-color: #15803d !important;
+}

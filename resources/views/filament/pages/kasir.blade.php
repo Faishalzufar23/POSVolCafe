@@ -1,5 +1,4 @@
 <x-filament-panels::page class="!p-0 !m-0">
-
     <style>
         .fi-main,
         .fi-body,
@@ -38,5 +37,6 @@
             style="height: 1000px; background">
         </iframe>
     </div>
+
 
 </x-filament-panels::page>

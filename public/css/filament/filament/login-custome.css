@@ -1,0 +1,79 @@
+/* ==== LOGIN PAGE CUSTOM FOR VOL FORTUIN ==== */
+
+/* Background halaman login */
+.fi-simple-layout {
+    background: #f4f7fa !important;
+}
+
+/* Card login di tengah */
+.fi-auth-card {
+    border-radius: 32px !important;
+    border-top: 5px solid #10b981 !important;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, .12) !important;
+    padding: 3rem 3rem 2.75rem !important;
+    max-width: 440px;
+}
+
+/* Header card: logo + text di tengah */
+.fi-auth-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Ganti logo default dengan logo Vol Fortuin */
+.fi-logo {
+    width: 90px;
+    height: 90px;
+    background: url('/images/volfortuin.png') center/contain no-repeat;
+}
+
+/* Sembunyikan SVG logo bawaan kalau ada */
+.fi-logo svg {
+    display: none;
+}
+
+/* Ubah judul "Sign in" menjadi "Semoga harimu lancar" */
+.fi-auth-card-heading {
+    font-size: 0 !important;  /* sembunyikan teks asli */
+    position: relative;
+}
+
+.fi-auth-card-heading::after {
+    content: "Semoga harimu lancar";
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Ubah subjudul jadi "Sign in to continue" versi kamu */
+.fi-auth-card-subheading {
+    font-size: 0 !important;
+    position: relative;
+}
+
+.fi-auth-card-subheading::after {
+    content: "Sign in to continue";
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* Tombol Sign In hijau seperti desain */
+.fi-auth-card form button[type="submit"] {
+    background: linear-gradient(135deg, #10b981, #16a34a) !important;
+    border-radius: 999px !important;
+    border: none !important;
+    font-weight: 600;
+}
+
+.fi-auth-card form button[type="submit"]:hover {
+    filter: brightness(1.05);
+}
+
+/* Sedikit rapiin input */
+.fi-auth-card form input[type="email"],
+.fi-auth-card form input[type="password"] {
+    border-radius: 999px !important;
+}

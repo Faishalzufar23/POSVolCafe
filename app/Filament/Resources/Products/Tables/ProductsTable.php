@@ -30,12 +30,13 @@ class ProductsTable
 
                 // ImageColumn::make('photo')
                 //     ->label('Foto')
-                //     ->getStateUsing(
-                //         fn($record) =>
-                //         $record->photo ? asset('storage/' . $record->photo) : null
-                //     )
-                //     ->defaultImageUrl(asset('no-image.png'))
+                //     ->size(50)
                 //     ->square()
+                //     ->disk('public') // penting!
+                //     ->url(fn ($record) => $record->photo
+                //         ? asset('storage/' . $record->photo)
+                //         : null
+                //     ),
 
 
 
