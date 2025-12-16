@@ -8,6 +8,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Actions\DeleteAction;
+
 
 // ⚡ ACTIONS YANG BENAR UNTUK FILAMENT 4.2
 use Filament\Actions\Action;
@@ -46,14 +48,14 @@ class ProductIngredientsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('ingredient.name')
-                ->label('Bahan'),
+                    ->label('Bahan'),
 
                 Tables\Columns\TextColumn::make('quantity')
-                ->label('Jumlah')
-                ->formatStateUsing(fn ($state) => rtrim(rtrim($state, '0'), '.')),
+                    ->label('Jumlah')
+                    ->formatStateUsing(fn($state) => rtrim(rtrim($state, '0'), '.')),
 
                 Tables\Columns\TextColumn::make('unit')
-                ->label('Satuan'),
+                    ->label('Satuan'),
             ])
 
             // ⚡ HEADER ACTION YANG BENAR
@@ -89,7 +91,17 @@ class ProductIngredientsRelationManager extends RelationManager
             // ⚡ EDIT
             ->recordActions([
                 EditAction::make(),
+
+                DeleteAction::make()
+                    ->label('Delete')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Bahan')
+                    ->modalDescription('Yakin ingin menghapus bahan ini dari resep produk?')
+                    ->modalSubmitActionLabel('Ya, hapus'),
             ])
+
 
             // ⚡ BULK DELETE
             ->bulkActions([
